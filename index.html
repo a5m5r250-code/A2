@@ -1,584 +1,316 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>A M R | QR & OCR Tools</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- QR -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <!-- OCR للصور -->
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
-  <!-- قراءة Word (DOCX) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
-  <!-- إنشاء PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <title>North Sussex Judo - Monthly Training Cost</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     * {
-      margin:0; padding:0; box-sizing:border-box;
-      font-family:system-ui,-apple-system,sans-serif;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
     }
 
     body {
-      background:#050517;
-      color:#fff;
-      padding:20px;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .shell {
-      width:100%;
-      max-width:540px;
-    }
-
-    .brand {
-      text-align:center;
-      font-size:14px;
-      letter-spacing:.4em;
-      color:#c7d2fe;
-      margin-bottom:14px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #4b2cff 0, #050017 40%, #020010 100%);
+      color: #f5f5ff;
+      padding: 20px;
     }
 
     .card {
-      background:rgba(10,10,26,.96);
-      border-radius:20px;
-      padding:20px 18px 18px;
-      box-shadow:0 0 22px rgba(88,80,236,.45);
-      border:1px solid rgba(167,139,250,.55);
+      width: 100%;
+      max-width: 520px;
+      background: rgba(7, 7, 20, 0.92);
+      border-radius: 16px;
+      padding: 22px 20px 24px;
+      box-shadow:
+        0 0 25px rgba(120, 70, 255, 0.4),
+        0 0 60px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(140, 100, 255, 0.5);
+      backdrop-filter: blur(12px);
     }
 
-    .title {
-      text-align:center;
-      font-size:20px;
-      margin-bottom:6px;
+    h1 {
+      font-size: 20px;
+      text-align: center;
+      margin: 0 0 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #e6ddff;
     }
 
     .subtitle {
-      text-align:center;
-      font-size:11px;
-      color:#a1a1aa;
-      margin-bottom:18px;
-      line-height:1.7;
+      text-align: center;
+      font-size: 12px;
+      color: #aaa3ff;
+      margin-bottom: 18px;
     }
 
-    /* Tabs (QR / Image-Word) */
-    .tabs {
-      display:flex;
-      margin-bottom:18px;
-      background:rgba(15,23,42,.95);
-      padding:3px;
-      border-radius:999px;
-      border:1px solid rgba(55,48,163,.9);
-      box-shadow:0 0 14px rgba(76,81,191,.45);
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #d6d3ff;
     }
 
-    .tab-btn {
-      flex:1;
-      border:none;
-      border-radius:999px;
-      padding:6px 4px;
-      font-size:9px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      cursor:pointer;
-      background:transparent;
-      color:#a5b4fc;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      transition:.18s;
-      white-space:nowrap;
+    input,
+    select {
+      width: 100%;
+      padding: 8px 9px;
+      border-radius: 8px;
+      border: 1px solid #3a317a;
+      background: #070818;
+      color: #f5f5ff;
+      font-size: 13px;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s, background 0.2s;
     }
 
-    .tab-btn.active {
-      background:linear-gradient(135deg,#6366f1,#a855f7);
-      color:#f9fafb;
-      box-shadow:0 0 10px rgba(129,140,248,.6);
+    input:focus,
+    select:focus {
+      border-color: #825bff;
+      box-shadow: 0 0 0 1px rgba(130, 91, 255, 0.5);
+      background: #07091f;
     }
 
-    .section {
-      margin-top:10px;
+    option {
+      background: #070818;
+      color: #f5f5ff;
     }
 
-    .label {
-      font-size:12px;
-      color:#e5e7eb;
-      margin-bottom:6px;
-      display:block;
+    .field {
+      margin-bottom: 10px;
     }
 
-    textarea {
-      width:100%;
-      border-radius:14px;
-      background:#020617;
-      border:1px solid #4b5563;
-      color:#e5e7eb;
-      padding:12px;
-      font-size:13px;
-      min-height:120px;
-      outline:none;
-      resize:vertical;
-      transition:.18s;
-      margin-bottom:16px; /* مسافة كبيرة بين الكتابة والأزرار */
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: linear-gradient(135deg, #9b5bff, #5d2cff);
+      color: #fff;
+      box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.9),
+        0 0 18px rgba(145, 88, 255, 0.7);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, opacity 0.12s;
     }
 
-    textarea:focus {
-      border-color:#8b5cf6;
-      box-shadow:0 0 0 1px rgba(129,140,248,.65);
-      background:#030712;
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.95),
+        0 0 26px rgba(160, 100, 255, 0.9);
+      opacity: 0.96;
     }
 
-    .help {
-      font-size:11px;
-      color:#9ca3af;
-      margin-top:-8px;
-      margin-bottom:16px;
+    button:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.7),
+        0 0 14px rgba(130, 80, 255, 0.6);
     }
 
-    .actions {
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-bottom:18px;
+    #errorMessage {
+      margin-top: 12px;
+      font-size: 12px;
+      color: hsl(345, 100%, 74%);
     }
 
-    .btn {
-      flex:1 1 48%;
-      border:none;
-      border-radius:999px;
-      padding:7px 8px;          /* أصغر ~ 50% */
-      font-size:10px;
-      letter-spacing:.15em;
-      text-transform:uppercase;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:4px;
-      white-space:nowrap;
-      transition:.16s;
+    #result {
+      margin-top: 16px;
+      padding: 12px 10px;
+      border-radius: 12px;
+      background: radial-gradient(circle at top left, #301a7a 0, #0a0718 55%, #050414 100%);
+      border: 1px solid rgba(130, 95, 255, 0.6);
+      font-size: 13px;
     }
 
-    /* البنفسجي الافتراضي للأدوات (Extract / Copy / PDF / Clear / Photo-Word) */
-    .btn-purple {
-      background:linear-gradient(135deg,#6366f1,#a855f7);
-      color:#f9fafb;
-      box-shadow:0 0 10px rgba(129,140,248,.45); /* إضاءة 50% */
+    #result h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: #f7f3ff;
     }
 
-    /* الأخضر الهادئ فقط لأزرار CREATE / CLEAR الخاصة بالـ QR */
-    .btn-green {
-      background:linear-gradient(135deg,rgba(74,222,128,.18),rgba(34,197,94,.3));
-      border:1px solid rgba(34,197,94,.5);
-      color:#bbf7d0;
-      box-shadow:0 0 8px rgba(34,197,94,.35);    /* هالة خفيفة */
+    #result h3 {
+      margin: 8px 0 6px;
+      font-size: 13px;
+      color: #d9d4ff;
     }
 
-    .btn-outline {
-      background:#020617;
-      color:#e5e7eb;
-      border:1px solid rgba(129,140,248,.7);
-      box-shadow:0 0 8px rgba(15,23,42,.6);
+    #result ul {
+      padding-left: 18px;
+      margin: 4px 0 6px;
     }
 
-    .btn:hover {
-      transform:translateY(-1px);
+    #result li {
+      margin-bottom: 3px;
     }
 
-    /* QR preview */
-    .qr-box {
-      margin-top:18px;
-      border-radius:16px;
-      border:1px dashed rgba(148,163,184,.6);
-      background:#020617;
-      min-height:180px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      box-shadow:0 0 14px rgba(15,23,42,.8);
-      text-align:center;
+    strong {
+      color: #f6f1ff;
     }
 
-    .qr-placeholder {
-      font-size:11px;
-      color:#6b7280;
-    }
-
-    .download-link {
-      display:block;
-      margin:14px auto 0;
-      padding:8px 18px;
-      border-radius:999px;
-      border:1px solid rgba(167,139,250,.9);
-      background:radial-gradient(circle at top,#312e81,#020617 60%);
-      color:#e5e7eb;
-      text-decoration:none;
-      font-size:10px;
-      letter-spacing:.13em;
-      text-transform:uppercase;
-      text-align:center;
-      opacity:0;
-      pointer-events:none;
-      transition:.16s;
-      box-shadow:0 0 10px rgba(129,140,248,.5);
-    }
-
-    .download-link.visible {
-      opacity:1;
-      pointer-events:auto;
-      transform:translateY(-1px);
-    }
-
-    /* زر رفع الملف Photo / Word */
-    .upload-btn {
-      width:100%;
-      text-align:center;
-      border-radius:14px;
-      padding:9px 10px;
-      font-size:11px;
-      border:none;
-      cursor:pointer;
-      background:linear-gradient(135deg,#6366f1,#a855f7);
-      color:#f9fafb;
-      box-shadow:0 0 10px rgba(129,140,248,.45);
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      margin-bottom:14px;
-    }
-    .upload-btn:hover { transform:translateY(-1px); }
-
-    #fileInput { display:none; }
-
-    .file-name {
-      font-size:10px;
-      color:#9ca3af;
-      margin-bottom:18px;
-      min-height:12px;
-      word-break:break-all;
-    }
-
-    .status {
-      margin-top:10px;
-      font-size:10px;
-      color:#9ca3af;
-      min-height:14px;
-    }
-
-    .footer {
-      text-align:center;
-      font-size:11px;
-      color:#6b7280;
-      margin-top:10px;
-    }
-
-    @media (max-width:480px) {
-      body { padding:14px 10px; }
-      .card { padding:18px 12px 16px; border-radius:18px; }
-      .btn { flex:1 1 100%; }
-      .shell { max-width:100%; }
+    @media (max-width: 480px) {
+      .card {
+        padding: 18px 14px 20px;
+      }
+      h1 {
+        font-size: 18px;
+      }
     }
   </style>
 </head>
-
 <body>
-<div class="shell">
-  <div class="brand">A&nbsp;M&nbsp;R</div>
 
   <div class="card">
-    <h1 class="title">Tools</h1>
-    <p class="subtitle">
-       <b> A5 QR</b>   <b></b>     </p>
+    <h1> Judo</h1>
+    <div class="subtitle">Monthly Training Cost Calculator</div>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button id="tabQr"  class="tab-btn active">QR CODE</button>
-      <button id="tabOcr" class="tab-btn">PHOTO / WORD</button>
-    </div>
-
-    <!-- Text → QR -->
-    <div id="sectionQr" class="section">
-      <label class="label" for="qrText">النص / الرابط</label>
-      <textarea id="qrText" placeholder="    اكتب..."></textarea>
-
-      <div class="actions">
-        <button id="btnQrGenerate" class="btn btn-green">CREATE QR</button>
-        <button id="btnQrClear"    class="btn btn-green">CLEAR</button>
+    <!-- FORM -->
+    <form id="judoForm">
+      <div class="field">
+        <label for="name">Athlete Name:</label>
+        <input type="text" id="name" required>
       </div>
 
-      <div id="qrPreview" class="qr-box">
-        <div class="qr-placeholder">
-          لا يوجد رمز QR بعد<br/>
-          <span style="font-size:10px;"> CREATE QR</span>
-        </div>
+      <div class="field">
+        <label for="plan">Training Plan:</label>
+        <select id="plan" required>
+          <option value="">-- Select plan --</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="elite">Elite</option>
+        </select>
       </div>
 
-      <a id="qrDownload" class="download-link" download="amr-qr.png">
-        DOWNLOAD QR
-      </a>
-    </div>
-
-    <!-- Image / Word → Text & PDF -->
-    <div id="sectionOcr" class="section" style="display:none;">
-
-      <!-- فقط زر Photo / Word بدون أى نص آخر -->
-      <label for="fileInput" class="upload-btn">PHOTO / WORD</label>
-      <input type="file" id="fileInput" accept="image/*,.docx" />
-      <div id="fileName" class="file-name"></div>
-
-      <span class="label" for="outputText">النص المستخرج</span>
-      <textarea id="outputText" placeholder="xxx..." readonly></textarea>
-
-      <div class="actions">
-        <button id="btnExtract" class="btn btn-purple">EXTRACT</button>
-        <button id="btnCopy"    class="btn btn-purple">COPY</button>
-        <button id="btnPdf"     class="btn btn-purple">PDF</button>
-        <button id="btnClear"   class="btn btn-outline">CLEAR</button>
+      <div class="field">
+        <label for="currentWeight">Current Weight (kg):</label>
+        <input type="number" id="currentWeight" min="1" step="0.1" required>
       </div>
 
-      <div id="status" class="status"></div>
-    </div>
+      <div class="field">
+        <label for="competitionWeight">Competition Weight Category (kg):</label>
+        <input type="number" id="competitionWeight" min="1" step="0.1" required>
+      </div>
+
+      <div class="field">
+        <label for="competitions">Number of competitions this month:</label>
+        <input type="number" id="competitions" min="0" step="1" value="0" required>
+      </div>
+
+      <div class="field">
+        <label for="privateHours">Private training hours per week (max 5):</label>
+        <input type="number" id="privateHours" min="0" max="5" step="0.5" value="0" required>
+      </div>
+
+      <button type="button" onclick="calculateCost()">
+        Calculate Monthly Cost
+      </button>
+    </form>
+
+    <div id="errorMessage"></div>
+    <div id="result" style="display:none;"></div>
   </div>
 
-  <div class="footer">A M R / A5</div>
-</div>
+  <script>
+    function calculateCost() {
+      var name = document.getElementById("name").value.trim();
+      var plan = document.getElementById("plan").value;
+      var currentWeight = parseFloat(document.getElementById("currentWeight").value);
+      var competitionWeight = parseFloat(document.getElementById("competitionWeight").value);
+      var competitions = parseInt(document.getElementById("competitions").value, 10);
+      var privateHours = parseFloat(document.getElementById("privateHours").value);
 
-<script>
-  // Tabs
-  const tabQr      = document.getElementById("tabQr");
-  const tabOcr     = document.getElementById("tabOcr");
-  const sectionQr  = document.getElementById("sectionQr");
-  const sectionOcr = document.getElementById("sectionOcr");
+      var errorDiv = document.getElementById("errorMessage");
+      var resultDiv = document.getElementById("result");
+      errorDiv.textContent = "";
+      resultDiv.style.display = "none";
+      resultDiv.innerHTML = "";
 
-  tabQr.addEventListener("click", () => {
-    tabQr.classList.add("active");
-    tabOcr.classList.remove("active");
-    sectionQr.style.display  = "";
-    sectionOcr.style.display = "none";
-  });
-
-  tabOcr.addEventListener("click", () => {
-    tabOcr.classList.add("active");
-    tabQr.classList.remove("active");
-    sectionOcr.style.display = "";
-    sectionQr.style.display  = "none";
-  });
-
-  /* === Text → QR === */
-  const qrText        = document.getElementById("qrText");
-  const btnQrGenerate = document.getElementById("btnQrGenerate");
-  const btnQrClear    = document.getElementById("btnQrClear");
-  const qrPreview     = document.getElementById("qrPreview");
-  const qrDownload    = document.getElementById("qrDownload");
-
-  function resetQr() {
-    qrPreview.innerHTML = `
-      <div class="qr-placeholder">
-        لا يوجد رمز QR بعد<br/>
-        <span style="font-size:10px;"></span>
-      </div>
-    `;
-    qrDownload.classList.remove("visible");
-    qrDownload.removeAttribute("href");
-  }
-
-  function createQr(data) {
-    qrPreview.innerHTML = "";
-    const wrapper = document.createElement("div");
-    qrPreview.appendChild(wrapper);
-
-    new QRCode(wrapper, {
-      text: data,
-      width: 220,
-      height: 220,
-      correctLevel: QRCode.CorrectLevel.H,
-    });
-
-    setTimeout(() => {
-      const img = wrapper.querySelector("img");
-      if (img && img.src) {
-        qrDownload.href = img.src;
-        qrDownload.classList.add("visible");
-      }
-    }, 200);
-  }
-
-  btnQrGenerate.addEventListener("click", () => {
-    const txt = qrText.value.trim();
-    if (!txt) {
-      alert(".");
-      return;
-    }
-    createQr(txt);
-  });
-
-  btnQrClear.addEventListener("click", () => {
-    qrText.value = "";
-    resetQr();
-  });
-
-  resetQr();
-
-  /* === Image / Word → Text & PDF === */
-  const fileInput  = document.getElementById("fileInput");
-  const fileNameEl = document.getElementById("fileName");
-  const btnExtract = document.getElementById("btnExtract");
-  const btnCopy    = document.getElementById("btnCopy");
-  const btnPdf     = document.getElementById("btnPdf");
-  const btnClear   = document.getElementById("btnClear");
-  const outputText = document.getElementById("outputText");
-  const statusEl   = document.getElementById("status");
-
-  function setStatus(msg) {
-    statusEl.textContent = msg || "";
-  }
-
-  fileInput.addEventListener("change", () => {
-    if (fileInput.files && fileInput.files[0]) {
-      fileNameEl.textContent = "Selected: " + fileInput.files[0].name;
-    } else {
-      fileNameEl.textContent = "";
-    }
-  });
-
-  btnExtract.addEventListener("click", () => {
-    const file = fileInput.files && fileInput.files[0];
-    if (!file) {
-      alert("من فضلك اختر ملفاً أولاً (صورة أو DOCX).");
-      return;
-    }
-
-    const name = file.name.toLowerCase();
-    const type = file.type || "";
-
-    // DOCX
-    if (name.endsWith(".docx")) {
-      if (!window.mammoth) {
-        alert("مشكلة في تحميل مكتبة DOCX، تأكد من اتصال الإنترنت.");
+      if (!name || !plan || isNaN(currentWeight) || isNaN(competitionWeight) ||
+          isNaN(competitions) || isNaN(privateHours)) {
+        errorDiv.textContent = "Please fill in all fields correctly.";
         return;
       }
-      setStatus("جاري قراءة ملف الـ Word...");
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const arrayBuffer = e.target.result;
-        window.mammoth.extractRawText({ arrayBuffer })
-          .then(result => {
-            const text = (result.value || "").trim();
-            outputText.value = text || "لم يتم العثور على نص في هذا الملف.";
-            setStatus("تم استخراج النص من ملف الـ Word.");
-          })
-          .catch(err => {
-            console.error(err);
-            setStatus("حدث خطأ أثناء قراءة ملف الـ Word.");
-            alert("حدث خطأ أثناء معالجة ملف الـ Word.");
-          });
-      };
-      reader.readAsArrayBuffer(file);
-      return;
-    }
 
-    // IMAGE
-    if (type.startsWith("image/")) {
-      if (!window.Tesseract) {
-        alert("مشكلة في تحميل مكتبة OCR، تأكد من اتصال الإنترنت.");
+      if (privateHours < 0 || privateHours > 5) {
+        errorDiv.textContent = "Private training hours per week must be between 0 and 5.";
         return;
       }
-      setStatus("جاري قراءة النص من الصورة...");
 
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const imgData = e.target.result;
-        try {
-          const { Tesseract } = window;
-          const result = await Tesseract.recognize(
-            imgData,
-            "eng+ara",
-            {
-              logger: (m) => {
-                if (m.status === "recognizing text") {
-                  const p = Math.round(m.progress * 100);
-                  setStatus(`جاري التعرف على النص... ${p}%`);
-                }
-              }
-            }
-          );
-          const text = (result.data.text || "").trim();
-          outputText.value = text || "لم يتم العثور على نص واضح في الصورة.";
-          setStatus("تم الانتهاء من استخراج النص من الصورة.");
-        } catch (err) {
-          console.error(err);
-          setStatus("حدث خطأ أثناء قراءة الصورة.");
-          alert("حدث خطأ أثناء معالجة الصورة.");
-        }
-      };
-      reader.readAsDataURL(file);
-      return;
-    }
-
-    alert("الملف المدعوم: صورة (PNG/JPG...) أو DOCX فقط.");
-  });
-
-  btnCopy.addEventListener("click", async () => {
-    const txt = outputText.value.trim();
-    if (!txt) {
-      alert("لا يوجد نص لنسخه.");
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(txt);
-      setStatus("تم نسخ النص إلى الحافظة (Clipboard).");
-    } catch (e) {
-      console.error(e);
-      setStatus("لم يتم النسخ، جرّب النسخ يدوياً.");
-    }
-  });
-
-  btnPdf.addEventListener("click", () => {
-    const txt = outputText.value.trim();
-    if (!txt) {
-      alert("لا يوجد نص لتحويله إلى PDF.");
-      return;
-    }
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-      alert("مشكلة في مكتبة PDF، تأكد من اتصال الإنترنت.");
-      return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation:"p", unit:"pt", format:"a4" });
-
-    const margin = 40;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const maxWidth = pageWidth - margin * 2;
-    const lineHeight = 16;
-    let y = margin;
-
-    const lines = doc.splitTextToSize(txt, maxWidth);
-    lines.forEach(line => {
-      if (y + lineHeight > pageHeight - margin) {
-        doc.addPage();
-        y = margin;
+      if (competitions > 0 && plan === "beginner") {
+        errorDiv.textContent = "Only Intermediate and Elite athletes can enter competitions.";
+        return;
       }
-      doc.text(line, margin, y, { align:"left" });
-      y += lineHeight;
-    });
 
-    doc.save("amr-text.pdf");
-    setStatus("تم إنشاء وتحميل ملف PDF.");
-  });
+      var weeklyFee;
+      if (plan === "beginner") {
+        weeklyFee = 25;
+      } else if (plan === "intermediate") {
+        weeklyFee = 30;
+      } else {
+        weeklyFee = 35;
+      }
 
-  btnClear.addEventListener("click", () => {
-    fileInput.value = "";
-    fileNameEl.textContent = "";
-    outputText.value = "";
-    setStatus("");
-  });
-</script>
+      var competitionFeePerEvent = 20;
+      var privateFeePerHour = 15;
+      var weeksInMonth = 4;
+
+      var monthlyTrainingFee = weeklyFee * weeksInMonth;
+      var competitionsCost = competitions * competitionFeePerEvent;
+      var privateMonthlyHours = privateHours * weeksInMonth;
+      var privateTrainingCost = privateMonthlyHours * privateFeePerHour;
+      var totalCost = monthlyTrainingFee + competitionsCost + privateTrainingCost;
+
+      var weightComparison = "";
+      if (currentWeight > competitionWeight) {
+        var diff = (currentWeight - competitionWeight).toFixed(1);
+        weightComparison = "The athlete is ABOVE the competition weight category by " + diff + " kg.";
+      } else if (currentWeight < competitionWeight) {
+        var diff2 = (competitionWeight - currentWeight).toFixed(1);
+        weightComparison = "The athlete is BELOW the competition weight category by " + diff2 + " kg.";
+      } else {
+        weightComparison = "The athlete is EXACTLY in the competition weight category.";
+      }
+
+      var html = "";
+      html += "<h2>Monthly Summary</h2>";
+      html += "<p><strong>Athlete Name:</strong> " + name + "</p>";
+
+      html += "<h3>Cost breakdown for this month</h3>";
+      html += "<ul>";
+      html += "<li>Training plan: " + plan.charAt(0).toUpperCase() + plan.slice(1) +
+              " – Weekly fee: £" + weeklyFee.toFixed(2) +
+              " → Monthly: £" + monthlyTrainingFee.toFixed(2) + "</li>";
+      html += "<li>Competitions entered: " + competitions +
+              " → Competition cost: £" + competitionsCost.toFixed(2) + "</li>";
+      html += "<li>Private training: " + privateHours + " hours/week (" +
+              privateMonthlyHours.toFixed(1) + " hours/month)" +
+              " → Cost: £" + privateTrainingCost.toFixed(2) + "</li>";
+      html += "</ul>";
+
+      html += "<p><strong>Total monthly cost:</strong> £" + totalCost.toFixed(2) + "</p>";
+
+      html += "<h3>Weight comparison</h3>";
+      html += "<p>Current weight: " + currentWeight.toFixed(1) + " kg<br>";
+      html += "Competition weight category: " + competitionWeight.toFixed(1) + " kg<br>";
+      html += "<strong>" + weightComparison + "</strong></p>";
+
+      resultDiv.innerHTML = html;
+      resultDiv.style.display = "block";
+    }
+  </script>
 
 </body>
 </html>
